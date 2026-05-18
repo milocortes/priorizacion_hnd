@@ -1,0 +1,61 @@
+ranking,clase_codigo,clase_titulo,portafolio,seccion_codigo,seccion_titulo
+11,1061,Elaboración de productos de molienda,lhf,C,Industrias manufactureras
+6,1073,Elaboración de cacao y chocolate y de productos de confitería,lhf,C,Industrias manufactureras
+8,1075,Elaboración de comidas y platos preparados,bp,C,Industrias manufactureras
+18,1075,Elaboración de comidas y platos preparados,lj,C,Industrias manufactureras
+9,1101,"Destilación, rectificación y mezcla de bebidas alcohólicas",lhf,C,Industrias manufactureras
+3,1394,"Fabricación de cuerdas, cordeles, bramantes y redes",lhf,C,Industrias manufactureras
+20,1811,Impresión,lhf,C,Industrias manufactureras
+16,1920,Fabricación de productos de la refinación del petróleo,lhf,C,Industrias manufactureras
+6,2011,Fabricación de sustancias químicas básicas,bp,C,Industrias manufactureras
+7,2011,Fabricación de sustancias químicas básicas,lj,C,Industrias manufactureras
+4,2012,Fabricación de abonos y compuestos de nitrógeno,lhf,C,Industrias manufactureras
+12,2021,Fabricación de plaguicidas y otros productos químicos de uso agropecuario,lhf,C,Industrias manufactureras
+17,2395,"Fabricación de artículos de hormigón, cemento y yeso",lhf,C,Industrias manufactureras
+19,2420,Fabricación de metales preciosos básicos y de otros metales no ferrosos,lhf,C,Industrias manufactureras
+13,2591,"Forja, prensado, estampado y laminado de metales; pulvimetalurgia",bp,C,Industrias manufactureras
+10,2591,"Forja, prensado, estampado y laminado de metales; pulvimetalurgia",lj,C,Industrias manufactureras
+12,2660,Fabricación de equipo de irradiación y equipo electrónico de uso médico y terapéutico,bp,C,Industrias manufactureras
+11,2660,Fabricación de equipo de irradiación y equipo electrónico de uso médico y terapéutico,lj,C,Industrias manufactureras
+18,2811,"Fabricación de motores y turbinas, excepto motores para aeronaves, vehículos automotores y motocicletas",bp,C,Industrias manufactureras
+9,2811,"Fabricación de motores y turbinas, excepto motores para aeronaves, vehículos automotores y motocicletas",lj,C,Industrias manufactureras
+10,2815,"Fabricación de hornos, hogares y quemadores",bp,C,Industrias manufactureras
+8,2815,"Fabricación de hornos, hogares y quemadores",lj,C,Industrias manufactureras
+2,2816,Fabricación de equipo de elevación y manipulación,bp,C,Industrias manufactureras
+1,2816,Fabricación de equipo de elevación y manipulación,lj,C,Industrias manufactureras
+13,2819,Fabricación de otros tipos de maquinaria de uso general,lj,C,Industrias manufactureras
+14,2822,Fabricación de maquinaria para la conformación de metales y de máquinas herramienta,lj,C,Industrias manufactureras
+1,2829,Fabricación de otros tipos de maquinaria de uso especial,bp,C,Industrias manufactureras
+2,2829,Fabricación de otros tipos de maquinaria de uso especial,lj,C,Industrias manufactureras
+7,2910,Fabricación de vehículos automotores,bp,C,Industrias manufactureras
+6,2910,Fabricación de vehículos automotores,lj,C,Industrias manufactureras
+5,3040,Fabricación de vehículos militares de combate,bp,C,Industrias manufactureras
+5,3040,Fabricación de vehículos militares de combate,lj,C,Industrias manufactureras
+13,4220,Construcción de proyectos de servicio público,lhf,F,Construcción
+9,4390,Otras actividades especializadas de construcción,bp,F,Construcción
+12,4390,Otras actividades especializadas de construcción,lj,F,Construcción
+10,4620,Venta al por mayor de materias primas agropecuarias y animales vivos,lhf,G,Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas
+5,4641,"Venta al por mayor de productos textiles, prendas de vestir y calzado",lhf,G,Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas
+14,4651,"Venta al por mayor de ordenadores (computadoras), equipo periférico y programas de informática",bp,G,Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas
+15,4659,Venta al por mayor de otros tipos de maquinaria y equipo,bp,G,Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas
+3,4662,Venta al por mayor de metales y minerales metalíferos,bp,G,Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas
+3,4662,Venta al por mayor de metales y minerales metalíferos,lj,G,Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas
+14,4669,"Venta al por mayor de desperdicios, desechos y chatarra y otros productos n.c.p.",lhf,G,Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas
+17,5021,Transporte de pasajeros por vías de navegación interiores,lj,H,Transporte y almacenamiento
+15,5224,Manipulación de la carga,lhf,H,Transporte y almacenamiento
+18,6910,Actividades jurídicas,lhf,M,"Actividades profesionales, científicas y técnicas"
+20,6910,Actividades jurídicas,bp,M,"Actividades profesionales, científicas y técnicas"
+17,7010,Actividades de oficinas principales,bp,M,"Actividades profesionales, científicas y técnicas"
+15,7010,Actividades de oficinas principales,lj,M,"Actividades profesionales, científicas y técnicas"
+7,7020,Actividades de consultoría de gestión,lhf,M,"Actividades profesionales, científicas y técnicas"
+11,7110,Actividades de arquitectura e ingeniería y actividades conexas de consultoría técnica,bp,M,"Actividades profesionales, científicas y técnicas"
+19,7110,Actividades de arquitectura e ingeniería y actividades conexas de consultoría técnica,lj,M,"Actividades profesionales, científicas y técnicas"
+8,7310,Publicidad,lhf,M,"Actividades profesionales, científicas y técnicas"
+1,7730,"Alquiler y arrendamiento de otros tipos de maquinaria, equipo y bienes tangibles",lhf,N,Actividades de servicios administrativos y de apoyo
+4,7740,"Arrendamiento de propiedad intelectual y productos similares, excepto obras protegidas por derechos de autor",bp,N,Actividades de servicios administrativos y de apoyo
+4,7740,"Arrendamiento de propiedad intelectual y productos similares, excepto obras protegidas por derechos de autor",lj,N,Actividades de servicios administrativos y de apoyo
+2,7911,Actividades de agencias de viajes,lhf,N,Actividades de servicios administrativos y de apoyo
+19,8110,Actividades combinadas de apoyo a instalaciones,bp,N,Actividades de servicios administrativos y de apoyo
+16,8110,Actividades combinadas de apoyo a instalaciones,lj,N,Actividades de servicios administrativos y de apoyo
+16,8291,Actividades de agencias de cobro y agencias de calificación crediticia,bp,N,Actividades de servicios administrativos y de apoyo
+20,8291,Actividades de agencias de cobro y agencias de calificación crediticia,lj,N,Actividades de servicios administrativos y de apoyo
