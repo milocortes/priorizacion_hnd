@@ -425,6 +425,7 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/fe/e1/b26c473480347ba82ffe4abde5452d4aa36313cc267e08d9a8ae9c7083fd/deltalake-1.6.0-cp310-abi3-macosx_10_12_x86_64.whl", hash = "sha256:e980c834c3657d0476a0e98763a7f6c6934717175d3ef86208dd974eceb35b15", size = 40940249, upload-time = "2026-05-18T14:25:43.718Z" },
     { url = "https://files.pythonhosted.org/packages/e4/22/ae4148a1d4a0b3cfaea1eed627610a96b79f3d25443237a26af1acb43a67/deltalake-1.6.0-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:d15cdc95a816dc1744fb208da54bb8dd57548ac4635c1b955727d57123a2e599", size = 37520755, upload-time = "2026-05-18T14:30:38.908Z" },
     { url = "https://files.pythonhosted.org/packages/0f/5d/a9fa27de555540fc11e83bd9e3de5c356f3e9e1019694f9ce32340b9e09f/deltalake-1.6.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cd22cf2301c8a3d06819813726ba3ecf68ac16ba12a7c4ac4b1c9b7177461da7", size = 41804855, upload-time = "2026-05-18T13:56:40.982Z" },
+    { url = "https://files.pythonhosted.org/packages/f1/bc/e09d13df887783018580d2383765cbd3aaf10c45ab428dd38e9c91053b75/deltalake-1.6.0-cp310-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:6780a3702f501c902fa7deecd7501a4f0e52d69321835bf6f87d72b13679bfd4", size = 40545361, upload-time = "2026-05-18T17:52:57.876Z" },
     { url = "https://files.pythonhosted.org/packages/4f/08/30720d394ecc394465c74ca2342cc51f9fe6f1867985b3df5cec3b6e8c63/deltalake-1.6.0-cp310-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:a2da86d4964cfd1db988158248cdf46acaea2d5ac7cc0eccee04bff565265153", size = 40538718, upload-time = "2026-05-18T13:46:27.813Z" },
     { url = "https://files.pythonhosted.org/packages/68/d0/9e0c87894641ce9b921e4d3f576ccedce68907cc55ba5004fc4291260289/deltalake-1.6.0-cp310-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:5fc975a93a043619175b86fbdf0951bf15ec4ac6e499d981dfc8c9024748d831", size = 41806788, upload-time = "2026-05-18T13:57:09.396Z" },
     { url = "https://files.pythonhosted.org/packages/0a/5b/a1e6d8d35e5b2f8460e45e9171af50c461283c7390c3977f4b7f623193b1/deltalake-1.6.0-cp310-abi3-win_amd64.whl", hash = "sha256:cdc15e2ad80376363ad4d13f475b00c23e4192b5e65e8e421b8aa7cf9df533fa", size = 44143517, upload-time = "2026-05-18T14:23:12.694Z" },
@@ -1283,6 +1284,19 @@ wheels = [
 ]
 
 [[package]]
+name = "plotly"
+version = "6.8.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "narwhals" },
+    { name = "packaging" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/94/fd/d72c292d78aadb93d1a9bcd76bf3c678271040c7cf10abe5788b33040a39/plotly-6.8.0.tar.gz", hash = "sha256:e088e7ddc68d4f70e3d66659224727a45296d71d2b8284181862d3d8f1f0d88f", size = 6915161, upload-time = "2026-06-03T18:33:40.226Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f9/14/abe5ce876ab5b66ee3c691bf537fcd43d037aea55d447aacf74630a8f31e/plotly-6.8.0-py3-none-any.whl", hash = "sha256:13c5c4a0f70b74cab1913eda0de49b826df5931708eb6f9c3010040614700ec8", size = 9902055, upload-time = "2026-06-03T18:33:34.26Z" },
+]
+
+[[package]]
 name = "polars"
 version = "1.40.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1344,6 +1358,7 @@ dependencies = [
     { name = "ipython" },
     { name = "polars", extra = ["all"] },
     { name = "streamlit" },
+    { name = "streamlit-extras" },
 ]
 
 [package.metadata]
@@ -1352,6 +1367,7 @@ requires-dist = [
     { name = "ipython", specifier = ">=9.13.0" },
     { name = "polars", extras = ["all"], specifier = ">=1.40.1" },
     { name = "streamlit", specifier = ">=1.57.0" },
+    { name = "streamlit-extras", specifier = ">=1.6.0" },
 ]
 
 [[package]]
@@ -1891,6 +1907,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/5d/f8/b2daf7a5f8ae15527daf94406e771bb6075e958a01c3dde9eba79dc3c9a3/streamlit-1.57.0.tar.gz", hash = "sha256:0b028d305c1a1a757071b2c9504966787602842fc8af6e873795ca58d2b4d12f", size = 8678859, upload-time = "2026-04-28T22:13:32.238Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d8/1a/3ca2293d8552bacea3e67e9600d2d1df7df4a325059769ad83d91c279595/streamlit-1.57.0-py3-none-any.whl", hash = "sha256:0d1d41972aeade5637dbb0e7f0eefa5312272f85304923d240a1b1f0475249c8", size = 9194216, upload-time = "2026-04-28T22:13:29.624Z" },
+]
+
+[[package]]
+name = "streamlit-extras"
+version = "1.6.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "plotly" },
+    { name = "streamlit" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/52/e2/34510d0639ee4e321c7e92205c990a15957b46aadaab56eef3bc59e15d23/streamlit_extras-1.6.0.tar.gz", hash = "sha256:d75bfabd2be35f1fba6bce3935d1c446cfcfbe03123478df1b5ba4a02a7c49c0", size = 408284, upload-time = "2026-05-15T15:33:22.666Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/85/6a/3cf1af290973094d8104c5ced9e5e5913c90852492419774286550d6c7bc/streamlit_extras-1.6.0-py3-none-any.whl", hash = "sha256:99c38dad3cd07d088da809c97f3e35cd65f97c983480c3115c724f0324fc8eee", size = 1042438, upload-time = "2026-05-15T15:33:24.18Z" },
 ]
 
 [[package]]

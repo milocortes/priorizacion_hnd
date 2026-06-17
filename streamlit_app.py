@@ -16,6 +16,7 @@ pg = st.navigation(
         ),
         st.Page("pages/especializacion_industrias.py", title="Especialización de Industrias", icon=":material/code:"),
         st.Page("pages/portafolios.py", title = "Portafolios", icon = "🚀"), 
+        st.Page("pages/viabilidad_atractivo.py", title = "Factores Viabilidad-Atractivo", icon = "🧮")
         #st.Page("pages/forecast_ml.py", title = "Pronóstico Modelos Aprendizaje de Máquina", icon = "📊"), 
         #st.Page("pages/actualiza_tokens.py", title = "Actualización de Tokens", icon = "🚨")
     ]
