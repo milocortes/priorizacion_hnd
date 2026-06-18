@@ -9,6 +9,11 @@ st.title(":material/bar_chart: Factores de Viabilidad y Atractivo")
 ## Carga datos
 cdata_intensivo = pl.read_csv("datos/honduras_intensivo_viabilidad_atractivo.csv")
 cdata_extensivo = pl.read_csv("datos/honduras_extensivo_viabilidad_atractivo.csv")
+ciiu_finales = pl.read_csv("datos/ciiu_finales.csv")
+
+cdata_extensivo = cdata_extensivo.filter(
+    pl.col("ACTIVITY").is_in(ciiu_finales["ciiu"])
+)
 
 def plot_industrias(criterio):
 
