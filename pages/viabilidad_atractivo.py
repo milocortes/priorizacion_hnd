@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import factores_descripcion
+from utils import factores_descripcion, calcula_topsis
 import polars as pl 
 import altair as alt 
 import pandas as pd 
@@ -7,40 +7,38 @@ import pandas as pd
 st.title(":material/bar_chart: Factores de Viabilidad y Atractivo")
 
 ## Carga datos
-cdata_intensivo = pl.read_csv("datos/honduras_intensivo_viabilidad_atractivo.csv")
-cdata_extensivo = pl.read_csv("datos/honduras_extensivo_viabilidad_atractivo.csv")
-ciiu_finales = pl.read_csv("datos/ciiu_finales.csv")
+factores = pl.read_csv("datos/factores.csv")
+cdata_honduras = pl.read_csv("datos/cdata_honduras.csv")
 
-cdata_extensivo = cdata_extensivo.filter(
-    pl.col("ACTIVITY").is_in(ciiu_finales["ciiu"])
-)
+### Resultados finales Intensivo
+resultados_finales_intensivo = pd.read_excel("datos/seleccion_final_complexity.xlsx", sheet_name="intensivo")
+
+### Resultados finales Extensivo
+resultados_finales_extensivo = pd.read_excel("datos/seleccion_final_complexity.xlsx", sheet_name="extensivo")
+
+
+#cdata_intensivo = pl.read_csv("datos/honduras_intensivo_viabilidad_atractivo.csv")
+#cdata_extensivo = pl.read_csv("datos/honduras_extensivo_viabilidad_atractivo.csv")
+#ciiu_finales = pl.read_csv("datos/ciiu_finales.csv")
+
+#cdata_extensivo = cdata_extensivo.filter(
+#    pl.col("ACTIVITY").is_in(ciiu_finales["ciiu"])
+#)
 
 def plot_industrias(criterio):
 
 
     # Define your custom mapping arrays
-    group_domains = ['Actividades de servicios administrativos y de apoyo',
-    'Actividades profesionales, científicas y técnicas',
-    'Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas',
-    'Construcción',
-    'Explotación de minas y canteras',
-    'Industrias manufactureras',
-    'Información y comunicaciones',
-    'Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación',
-    'Suministro de electricidad, gas, vapor y aire acondicionado',
-    'Transporte y almacenamiento']
-
+    group_domains = [
+            "C1 Manufactura avanzada y metalmecánica",
+            "C2 Química, materiales y farmacéutica",
+            "C3 Agroindustria y alimentos procesados",
+            "C4 Servicios empresariales intensivos en conocimiento (KIBS)",
+            "C5 Turismo, conectividad y logística",
+            "C6 Textiles, confección y materiales flexibles"
+    ]
     color_range = [
-        "#1f77b4", 
-        "#ff7f0e",
-        "#2ca02c",
-        "#d62728",
-        "#9467bd",
-        "#FFFF00",
-        "#e377c2",
-        "#7f7f7f",
-        "#bcbd22",
-        "#17becf",
+        "#4E79A7", "#F28E2B", "#E15759", "#76B7B2", "#59A14F", "#EDC948"
     ]
 
 
@@ -57,11 +55,12 @@ def plot_industrias(criterio):
                 ).encode(
             x=alt.X('topsis_viabilidad').scale(zero=False).title("Viabilidad"),
             y=alt.Y('topsis_atractivo').scale(zero=False).title("Atractivo"),#.scale(type ="log"),
-            color = alt.Color("seccion_titulo", scale=alt.Scale(domain=group_domains, range=color_range)).title("Sección"),
+            color = alt.Color("Clusters", scale=alt.Scale(domain=group_domains, range=color_range)).title("Cluster"),
             #size = alt.Size("OBS_VALUE").scale(type ="log").title("Empleo"),
             tooltip=[
 
                     alt.Tooltip('nombre_actividad', title='Actividad'), 
+                    alt.Tooltip("ACTIVITY", title = "Código CIIU Rev 4"),
                     alt.Tooltip('division_titulo', title='División CIIU Rev 4'),
                     alt.Tooltip('OBS_VALUE', title='Empleo'),
             ] 
@@ -97,11 +96,12 @@ def plot_industrias(criterio):
                 ).encode(
             x=alt.X('topsis_viabilidad').scale(zero=False).title("Viabilidad"),
             y=alt.Y('topsis_atractivo').scale(zero=False).title("Atractivo"),#.scale(type ="log"),
-            color = alt.Color("seccion_titulo", scale=alt.Scale(domain=group_domains, range=color_range)).title("Sección"),
+            color = alt.Color("Clusters", scale=alt.Scale(domain=group_domains, range=color_range)).title("Cluster"),
             #size = alt.Size("OBS_VALUE").scale(type ="log").title("Empleo"),
             tooltip=[
 
                     alt.Tooltip('nombre_actividad', title='Actividad'), 
+                    alt.Tooltip("ACTIVITY", title = "Código CIIU Rev 4"),
                     alt.Tooltip('division_titulo', title='División CIIU Rev 4'),
                     alt.Tooltip('OBS_VALUE', title='Empleo'),
             ] 
@@ -138,7 +138,7 @@ with tab1:
         st.markdown(
             """
             - Capacidad para movilizar FDI (Mundo y América Latina)
-            - Crecimiento de la industria a nivel mundial (Empleo)
+            - Crecimiento de la industria a nivel mundial (Producción)
             - Crecimiento de la industria a nivel mundial (Exportaciones)
             - Posibilidad de sustituir las importaciones estadounidenses procedentes de China.
             - Capacidad para generar empleo.
@@ -216,6 +216,84 @@ with tab2:
 
         """
     )
+
+    with st.popover("Selecciona Criterios"):
+
+        col1_factores, col2_factores = st.columns(2, border=True)
+
+        with col1_factores:
+            st.header("**Atractivo**")
+
+            ### Factores Atractivo
+            factores_atractivo = [
+                "Monto acumulado de inversión en capital (Mundo)", 
+                "Monto acumulado de inversión en capital (LAC)", 
+                "Tasa de crecimiento de la inversión (Mundo)", 
+                "Tasa de crecimiento de la inversión (LAC)", 
+                "Elasticidad Empleo/Inversión (Mundo)",
+                "Elasticidad Empleo/Inversión (LAC)", 
+                "Crecimiento del Producto",
+                "Crecimiento de Exportaciones", 
+                "Posibilidad de sustituir las importaciones estadounidenses procedentes de China", 
+                "Capacidad para crear empleo"
+            ]
+            selected_factores_atractivo = []
+
+            st.write("Selecciona Factores de Atractivo:")
+
+            # Generate checkboxes dynamically
+            for factor in factores_atractivo:
+                # Use the item name as a unique key
+                checked = st.checkbox(factor, value=True)
+                if checked:
+                    selected_factores_atractivo.append(factor)
+        with col2_factores:
+            st.header("**Viabilidad**")
+            ### Factores Viabilidad
+            factores_viabilidad = [
+                "Fortaleza en países como Honduras (RCA en el grupo de pares)", 
+                "Disponibilidad de Insumos", 
+                "Dependencia de una restricción o restricción potencial (Energía)", 
+                "Dependencia de una restricción o restricción potencial (Electricidad)"
+            ]
+            selected_factores_viabilidad = []
+
+            st.write("Selecciona Factores de Viabilidad:")
+
+            # Generate checkboxes dynamically
+            for factor in factores_viabilidad:
+                # Use the item name as a unique key
+                checked = st.checkbox(factor, value=True)
+                if checked:
+                    selected_factores_viabilidad.append(factor)
+
+        #st.write("Factores Viabilidad:", selected_factores_viabilidad)
+
+    ### Calcula topsis
+
+    topsis_data = calcula_topsis(
+        cdata_honduras,
+        factores, 
+        selected_factores_viabilidad,
+        selected_factores_atractivo, 
+    )
+
+    cdata_intensivo = topsis_data.filter(
+        pl.col("ACTIVITY").is_in(resultados_finales_intensivo["ciiu4_cod"])
+    ).join(
+        pl.from_pandas(resultados_finales_intensivo[["Clusters", "ciiu4_cod"]]) , 
+        left_on="ACTIVITY", 
+        right_on="ciiu4_cod"
+    )
+
+    cdata_extensivo = topsis_data.filter(
+        pl.col("ACTIVITY").is_in(resultados_finales_extensivo["ciiu4_cod"])
+    ).join(
+        pl.from_pandas(resultados_finales_extensivo[["Clusters", "ciiu4_cod"]]) , 
+        left_on="ACTIVITY", 
+        right_on="ciiu4_cod"
+    )
+    print(cdata_extensivo.columns)
 
     st.markdown(f"## {selected_criteria}")
     plot_industrias(selected_criteria)

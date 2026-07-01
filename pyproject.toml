@@ -8,6 +8,7 @@ dependencies = [
     "altair>=6.1.0",
     "ipython>=9.13.0",
     "polars[all]>=1.40.1",
+    "pymcdm>=1.4.0",
     "streamlit>=1.57.0",
     "streamlit-extras>=1.6.0",
 ]

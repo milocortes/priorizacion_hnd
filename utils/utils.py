@@ -1,3 +1,9 @@
+import numpy as np
+from pymcdm.methods import TOPSIS
+from pymcdm.helpers import rrankdata
+from typing import List 
+import polars as pl
+
 factores_descripcion = {
     "Capacidad para movilizar FDI (Mundo y América Latina)" : 
     """
@@ -10,9 +16,9 @@ factores_descripcion = {
 
     >La Elasticidad de crecimiento del empleo al crecimiento de la inversión mide cómo responde el empleo a los cambios en la inversión extranjera directa (IED) en un sector específico. Indica cuánto crece el empleo de la industria por cada 1 % de aumento en el crecimiento sectorial del FDI.
     """,
-    "Crecimiento de la industria a nivel mundial (Empleo)" : 
+    "Crecimiento de la industria a nivel mundial (Producción)" : 
     """
-    - Crecimiento del empleo de las industrias en el mundo. 
+    - Crecimiento de la Producción de las industrias en el mundo. 
     >Fuente : OECD Structural Business Statistics
     """,
     "Crecimiento de la industria a nivel mundial (Exportaciones)" : 
@@ -60,3 +66,98 @@ factores_descripcion = {
 
     """,
 }
+                     
+
+cw_atractivo = {
+    "Monto acumulado de inversión en capital (Mundo)" : "cumulative_investment_world", 
+    "Monto acumulado de inversión en capital (LAC)" : "cumulative_investment_lac",
+    "Tasa de crecimiento de la inversión (Mundo)" : "cagr_investment_world",
+    "Tasa de crecimiento de la inversión (LAC)" : "cagr_investment_lac",
+    "Elasticidad Empleo/Inversión (Mundo)" : "elasticidad_empleo_fdi_world",
+    "Elasticidad Empleo/Inversión (LAC)" : "elasticidad_empleo_fdi_lac",
+    "Crecimiento del Producto" : "cagr_production",
+    "Crecimiento de Exportaciones" : "cagr_exports",
+    "Posibilidad de sustituir las importaciones estadounidenses procedentes de China" : "share_imports_china", 
+    "Capacidad para crear empleo" : "elasticidad_empleo_producto"
+}
+
+                
+                 
+                
+                
+
+cw_viabilidad = {
+    "Fortaleza en países como Honduras (RCA en el grupo de pares)" : "rca_peers",
+    "Disponibilidad de Insumos" : "razon_insumos_presentes", 
+    "Dependencia de una restricción o restricción potencial (Energía)" : "share_energy",
+    "Dependencia de una restricción o restricción potencial (Electricidad)" : "razon_electricidad_gasto_total",
+}
+
+viabilidad_direccion = {
+    "Fortaleza en países como Honduras (RCA en el grupo de pares)" : 1,
+    "Disponibilidad de Insumos" : 1, 
+    "Dependencia de una restricción o restricción potencial (Energía)" : -1,
+    "Dependencia de una restricción o restricción potencial (Electricidad)" : -1,
+}
+
+def calcula_topsis(
+        cdata_honduras : pl.DataFrame,
+        factores : pl.DataFrame, 
+        factores_viabilidad : List[str],
+        factores_atractivo : List[str], 
+    ):
+
+    ## Selecciona factores de viabilidad y atractivo
+    viabilidad_factores = [cw_viabilidad[factor] for factor in factores_viabilidad]
+    atractivo_factores = [cw_atractivo[factor] for factor in factores_atractivo]
+
+    ### TOPSIS Atractivo
+    alts_atractivo = factores.select(atractivo_factores).to_numpy()
+
+    # Define criteria weights (should sum up to 1)
+    weights_atractivo = np.array([1/len(atractivo_factores)]*len(atractivo_factores))
+
+    # Define criteria types (1 for profit, -1 for cost)
+    types_atractivo = np.array([1]*len(atractivo_factores))
+
+    # Create object of the method
+    # Note, that default normalization method for TOPSIS is minmax
+    topsis_atractivo = TOPSIS()
+
+    # Determine preferences and ranking for alternatives
+    pref_atractivo = topsis_atractivo(alts_atractivo, weights_atractivo, types_atractivo)
+    ranking_atractivo = rrankdata(pref_atractivo)
+
+    ### TOPSIS Viabilidad
+    alts_viabilidad = factores.select(viabilidad_factores).to_numpy()
+
+    # Define criteria weights (should sum up to 1)
+    weights_viabilidad = np.array([1/len(viabilidad_factores)]*len(viabilidad_factores))
+
+    # Define criteria types (1 for profit, -1 for cost)
+    types_viabilidad = np.array([viabilidad_direccion[factor] for factor in factores_viabilidad])
+
+    # Create object of the method
+    # Note, that default normalization method for TOPSIS is minmax
+    topsis_viabilidad = TOPSIS()
+
+    # Determine preferences and ranking for alternatives
+    pref_viabilidad = topsis_viabilidad(alts_viabilidad, weights_viabilidad, types_viabilidad)
+    ranking_viabilidad = rrankdata(pref_viabilidad)
+
+    ### Creamos data frame con los scores de viabilidad y atractivo
+    scores_viabilidad_atractivo = factores.select("ciiu").with_columns(
+            topsis_atractivo = pref_atractivo, 
+            topsis_viabilidad = pref_viabilidad, 
+    ).with_columns(
+        pl.col("ciiu").cast(pl.Int64)
+    )
+
+    ### Reunimos scores con datos de complejidad de honduras
+    cdata_honduras = cdata_honduras.join(
+            scores_viabilidad_atractivo, 
+            left_on="ACTIVITY", 
+            right_on="ciiu"
+        )
+
+    return cdata_honduras
