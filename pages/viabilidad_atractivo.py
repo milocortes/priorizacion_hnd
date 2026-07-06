@@ -226,11 +226,11 @@ with tab2:
 
             ### Factores Atractivo
             factores_atractivo = [
-                "Monto acumulado de inversión en capital (Mundo)", 
+                #"Monto acumulado de inversión en capital (Mundo)", 
                 "Monto acumulado de inversión en capital (LAC)", 
-                "Tasa de crecimiento de la inversión (Mundo)", 
+                #"Tasa de crecimiento de la inversión (Mundo)", 
                 "Tasa de crecimiento de la inversión (LAC)", 
-                "Elasticidad Empleo/Inversión (Mundo)",
+                #"Elasticidad Empleo/Inversión (Mundo)",
                 "Elasticidad Empleo/Inversión (LAC)", 
                 "Crecimiento del Producto",
                 "Crecimiento de Exportaciones", 

@@ -3,6 +3,7 @@ from pymcdm.methods import TOPSIS
 from pymcdm.helpers import rrankdata
 from typing import List 
 import polars as pl
+import pandas as pd 
 
 factores_descripcion = {
     "Capacidad para movilizar FDI (Mundo y América Latina)" : 
@@ -100,6 +101,19 @@ viabilidad_direccion = {
     "Dependencia de una restricción o restricción potencial (Electricidad)" : -1,
 }
 
+atractivo_direccion = {
+    "Monto acumulado de inversión en capital (Mundo)" : 1, 
+    "Monto acumulado de inversión en capital (LAC)" : 1,
+    "Tasa de crecimiento de la inversión (Mundo)" : 1,
+    "Tasa de crecimiento de la inversión (LAC)" : 1,
+    "Elasticidad Empleo/Inversión (Mundo)" : 1,
+    "Elasticidad Empleo/Inversión (LAC)" : 1,
+    "Crecimiento del Producto" : 1,
+    "Crecimiento de Exportaciones" : 1,
+    "Posibilidad de sustituir las importaciones estadounidenses procedentes de China" : 1, 
+    "Capacidad para crear empleo" : 1
+}
+
 def calcula_topsis(
         cdata_honduras : pl.DataFrame,
         factores : pl.DataFrame, 
@@ -161,3 +175,104 @@ def calcula_topsis(
         )
 
     return cdata_honduras
+
+def calcula_normalized_decision_matrix(
+        cdata_honduras : pl.DataFrame,
+        factores : pl.DataFrame, 
+        factores_lista_long_name : List[str],
+        tipo_factor : str
+    ):
+
+    ## Selecciona factores de viabilidad y atractivo
+    if tipo_factor == "atractivo": 
+        factores_lista = [cw_atractivo[factor] for factor in factores_lista_long_name]
+    elif tipo_factor == "viabilidad": 
+        factores_lista = [cw_viabilidad[factor] for factor in factores_lista_long_name]
+
+    ### TOPSIS 
+    alts = factores.select(factores_lista).to_numpy()
+
+    # Define criteria weights (should sum up to 1)
+    weights = np.array([1/len(factores_lista)]*len(factores_lista))
+
+    # Define criteria types (1 for profit, -1 for cost)
+    if tipo_factor == "atractivo": 
+        types = np.array([atractivo_direccion[factor] for factor in factores_lista_long_name])
+    elif tipo_factor == "viabilidad": 
+        types = np.array([viabilidad_direccion[factor] for factor in factores_lista_long_name])
+
+    # Create object of the method
+    # Note, that default normalization method for TOPSIS is minmax
+    topsis = TOPSIS()
+
+    # Determine preferences and ranking for alternatives
+    pref = topsis(alts, weights, types)
+    ranking = rrankdata(pref)
+
+    # If you want to inspect computation process in details
+    results = topsis(alts, weights, types, verbose=True)
+
+    # Construimos Normalized decision matrix
+    normalized_decision_matrix =  results.results[0].data
+    normalized_decision_matrix = pd.DataFrame(
+        normalized_decision_matrix, 
+        columns=factores_lista,
+        index = factores["ciiu"]
+        
+    )
+    normalized_decision_matrix.index.name = "ciiu"
+    normalized_decision_matrix = normalized_decision_matrix.reset_index()
+    normalized_decision_matrix["ciiu"] = normalized_decision_matrix["ciiu"].astype(int)
+
+    print(normalized_decision_matrix.shape)
+
+    ## Reunimos los nombres de las clases
+    normalized_decision_matrix = cdata_honduras.select("ACTIVITY", "clase_titulo").join(
+        pl.from_pandas(normalized_decision_matrix), 
+        left_on="ACTIVITY", 
+        right_on="ciiu"
+    ).to_pandas()
+    
+    
+    return normalized_decision_matrix
+
+def build_radar_data(
+        cdata_honduras : pl.DataFrame,
+        factores : pl.DataFrame, 
+        factores_lista_long_name : List[str],
+        tipo_factor : str,
+        industria : str):
+
+    datos = calcula_normalized_decision_matrix(
+        cdata_honduras,
+        factores, 
+        factores_lista_long_name,
+        tipo_factor
+    )
+
+    ## Selecciona factores de viabilidad y atractivo
+    if tipo_factor == "atractivo": 
+        criterios = [cw_atractivo[factor] for factor in factores_lista_long_name]
+    elif tipo_factor == "viabilidad": 
+        criterios = [cw_viabilidad[factor] for factor in factores_lista_long_name]
+
+
+    radar_data = datos.query(f"clase_titulo == '{industria}'")[criterios]
+    
+    indicator_data = [
+        {
+            "name" : criterio, 
+            "max" : 1.0
+        }
+        for criterio in factores_lista_long_name
+    ] 
+
+    data = [
+        {
+            "value" : list(np.round(radar_data.to_numpy()[0], 2) ), 
+            "name" : industria
+        }
+    ]
+
+    return indicator_data, data
+    

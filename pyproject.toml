@@ -10,5 +10,6 @@ dependencies = [
     "polars[all]>=1.40.1",
     "pymcdm>=1.4.0",
     "streamlit>=1.57.0",
+    "streamlit-echarts[pyecharts]>=0.7.0",
     "streamlit-extras>=1.6.0",
 ]
