@@ -249,7 +249,7 @@ with tab1:
         st.header("**Atractivo**")
         st.markdown(
             """
-            - Capacidad para movilizar FDI (Mundo y América Latina)
+            - Capacidad para movilizar FDI América Latina
             - Crecimiento de la industria a nivel mundial (Producción)
             - Crecimiento de la industria a nivel mundial (Exportaciones)
             - Posibilidad de sustituir las importaciones estadounidenses procedentes de China.
