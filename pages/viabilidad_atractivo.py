@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import factores_descripcion, calcula_topsis
+from utils import factores_descripcion, calcula_topsis, condiciones_fases
 import polars as pl 
 import altair as alt 
 import pandas as pd 
@@ -68,11 +68,36 @@ def plot_industrias(criterio):
         )
 
         # Create a horizontal line at y = -1.14
-        rule_atractivo = alt.Chart(pd.DataFrame({'y': [cdata_intensivo["topsis_atractivo"].mean()]})).mark_rule(color='red').encode(y='y:Q')
-        rule_viabilidad = alt.Chart(pd.DataFrame({'x': [cdata_intensivo["topsis_viabilidad"].mean()]})).mark_rule(color='red').encode(x='x:Q')
+        rule_atractivo = alt.Chart(pd.DataFrame({'y': [cdata_intensivo["topsis_atractivo"].mean()]})).mark_rule(color='gray', strokeWidth=3, strokeDash=[4,4]).encode(y='y:Q')
+        rule_viabilidad = alt.Chart(pd.DataFrame({'x': [cdata_intensivo["topsis_viabilidad"].mean()]})).mark_rule(color='gray', strokeWidth=3, strokeDash=[4,4]).encode(x='x:Q')
 
+        # 2. Quadrant labels dataframe with custom coordinates
+        # Change these values to position text exactly where you want it
+        quadrant_labels = pd.DataFrame({
+            'y_pos': [cdata_extensivo["topsis_atractivo"].max(), 
+                    cdata_extensivo["topsis_atractivo"].min()*1.05, 
+                    cdata_extensivo["topsis_atractivo"].max(),
+                    cdata_extensivo["topsis_atractivo"].min()*1.05],     # X coordinates for text
+            'x_pos': [cdata_extensivo["topsis_viabilidad"].max()*0.95,
+                    cdata_extensivo["topsis_viabilidad"].max()*0.95,
+                    cdata_extensivo["topsis_viabilidad"].min()*1.05,
+                    cdata_extensivo["topsis_viabilidad"].min()*1.05],     # Y coordinates for text
+            'label': ['Fase I', 'Fase II', 'Fase III', 'Fase IV'],
+            'align': ['right', 'left', 'left', 'right'] # Optional: aligns text inside boundaries
+        })
 
-        plot_intensivo = (plot_intensivo + rule_atractivo + rule_viabilidad).properties(
+        # 5. Quadrant text layer
+        text_layer = alt.Chart(quadrant_labels).mark_text(
+            size=16,
+            fontStyle='bold',
+            color='black'
+        ).encode(
+            x='x_pos:Q',
+            y='y_pos:Q',
+            text='label:N'
+        )
+
+        plot_intensivo = (plot_intensivo + rule_atractivo + rule_viabilidad + text_layer).properties(
         #plot_intensivo.properties(
                 title=alt.TitleParams(
                     "Diagrama Viabilidad-Atractivo",
@@ -82,6 +107,37 @@ def plot_industrias(criterio):
         )
 
         st.altair_chart(plot_intensivo, theme=None, use_container_width=True)
+
+        cdata_intensivo_min = cdata_intensivo.select(["fase", "Clusters", "ACTIVITY", "clase_titulo"])
+
+        # Pass configuration into st.dataframe
+        st.dataframe(
+            cdata_intensivo_min.sort("fase", "Clusters"),
+            column_config={
+                "fase": st.column_config.TextColumn(
+                    "Fase", 
+                    help="Fase de priorización",
+                    max_chars=20
+                ),
+                "Clusters": st.column_config.TextColumn(
+                    "Cluster", 
+                    max_chars=20
+                ),
+                "ACTIVITY": st.column_config.TextColumn(
+                    "Clave CIIU4", 
+                    #display_text="Click here to Buy"
+                    max_chars=20
+                ), 
+                "clase_titulo" : st.column_config.TextColumn(
+                    "Actividad CIIU4", 
+                    #display_text="Click here to Buy"
+                    max_chars=20
+                ), 
+            },
+            hide_index=True,
+            use_container_width=True
+        )
+
     elif criterio == "Margen Extensivo":
 
 
@@ -109,11 +165,37 @@ def plot_industrias(criterio):
         )
 
         # Create a horizontal line at y = -1.14
-        rule_extensivo_atractivo = alt.Chart(pd.DataFrame({'y': [cdata_extensivo["topsis_atractivo"].mean()]})).mark_rule(color='red').encode(y='y:Q')
-        rule_extensivo_viabilidad = alt.Chart(pd.DataFrame({'x': [cdata_extensivo["topsis_viabilidad"].mean()]})).mark_rule(color='red').encode(x='x:Q')
+        rule_extensivo_atractivo = alt.Chart(pd.DataFrame({'y': [cdata_extensivo["topsis_atractivo"].mean()]})).mark_rule(color='gray', strokeWidth=3, strokeDash=[4,4]).encode(y='y:Q')
+        rule_extensivo_viabilidad = alt.Chart(pd.DataFrame({'x': [cdata_extensivo["topsis_viabilidad"].mean()]})).mark_rule(color='gray', strokeWidth=3, strokeDash=[4,4]).encode(x='x:Q')
+
+        # 2. Quadrant labels dataframe with custom coordinates
+        # Change these values to position text exactly where you want it
+        quadrant_labels = pd.DataFrame({
+            'y_pos': [cdata_extensivo["topsis_atractivo"].max(), 
+                    cdata_extensivo["topsis_atractivo"].min()*1.05, 
+                    cdata_extensivo["topsis_atractivo"].max(),
+                    cdata_extensivo["topsis_atractivo"].min()*1.05],     # X coordinates for text
+            'x_pos': [cdata_extensivo["topsis_viabilidad"].max()*0.95,
+                    cdata_extensivo["topsis_viabilidad"].max()*0.95,
+                    cdata_extensivo["topsis_viabilidad"].min()*1.05,
+                    cdata_extensivo["topsis_viabilidad"].min()*1.05],     # Y coordinates for text
+            'label': ['Fase I', 'Fase II', 'Fase III', 'Fase IV'],
+            'align': ['right', 'left', 'left', 'right'] # Optional: aligns text inside boundaries
+        })
+
+        # 5. Quadrant text layer
+        text_layer = alt.Chart(quadrant_labels).mark_text(
+            size=16,
+            fontStyle='bold',
+            color='black'
+        ).encode(
+            x='x_pos:Q',
+            y='y_pos:Q',
+            text='label:N'
+        )
 
 
-        plot_extensivo = (plot_extensivo + rule_extensivo_atractivo + rule_extensivo_viabilidad).properties(
+        plot_extensivo = (plot_extensivo + rule_extensivo_atractivo + rule_extensivo_viabilidad + text_layer).properties(
         #plot_intensivo.properties(
                 title=alt.TitleParams(
                     "Diagrama Viabilidad-Atractivo",
@@ -123,6 +205,36 @@ def plot_industrias(criterio):
         )
 
         st.altair_chart(plot_extensivo, theme=None, use_container_width=True)
+
+        cdata_extensivo_min = cdata_extensivo.select(["fase", "Clusters", "ACTIVITY", "clase_titulo"])
+
+        # Pass configuration into st.dataframe
+        st.dataframe(
+            cdata_extensivo_min.sort("fase", "Clusters"),
+            column_config={
+                "fase": st.column_config.TextColumn(
+                    "Fase", 
+                    help="Fase de priorización",
+                    max_chars=20
+                ),
+                "Clusters": st.column_config.TextColumn(
+                    "Cluster", 
+                    max_chars=20
+                ),
+                "ACTIVITY": st.column_config.TextColumn(
+                    "Clave CIIU4", 
+                    #display_text="Click here to Buy"
+                    max_chars=20
+                ), 
+                "clase_titulo" : st.column_config.TextColumn(
+                    "Actividad CIIU4", 
+                    #display_text="Click here to Buy"
+                    max_chars=20
+                ), 
+            },
+            hide_index=True,
+            use_container_width=True
+        )
 
 
 
@@ -286,6 +398,10 @@ with tab2:
         pl.from_pandas(resultados_finales_intensivo[["Clusters", "ciiu4_cod"]]) , 
         left_on="ACTIVITY", 
         right_on="ciiu4_cod"
+    ).with_columns(
+        fase = pl.coalesce(
+                pl.when(cond).then(pl.lit(val)) for val, cond in condiciones_fases.items()
+            )
     )
 
     cdata_extensivo = topsis_data.filter(
@@ -294,6 +410,10 @@ with tab2:
         pl.from_pandas(resultados_finales_extensivo[["Clusters", "ciiu4_cod"]]) , 
         left_on="ACTIVITY", 
         right_on="ciiu4_cod"
+    ).with_columns(
+        fase = pl.coalesce(
+                pl.when(cond).then(pl.lit(val)) for val, cond in condiciones_fases.items()
+            )
     )
     print(cdata_extensivo.columns)
 

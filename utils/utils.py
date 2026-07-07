@@ -298,3 +298,43 @@ def build_radar_data(
 
     return indicator_data, data
     
+
+## Diccionario con condiciones de etiquetas de fases
+condiciones_fases = {
+    "I" : 
+    (
+        (
+            pl.col("topsis_atractivo") >= pl.col("topsis_atractivo").mean()
+        ) &
+        (
+            pl.col("topsis_viabilidad") >= pl.col("topsis_viabilidad").mean()
+        ) 
+    ), 
+    "II" : 
+    (
+        (
+            pl.col("topsis_atractivo") < pl.col("topsis_atractivo").mean()
+        ) &
+        (
+            pl.col("topsis_viabilidad") >= pl.col("topsis_viabilidad").mean()
+        ) 
+    ), 
+    "III" : 
+    (
+        (
+            pl.col("topsis_atractivo") >= pl.col("topsis_atractivo").mean()
+        ) &
+        (
+            pl.col("topsis_viabilidad") < pl.col("topsis_viabilidad").mean()
+        ) 
+    ), 
+    "IV" : 
+    (
+        (
+            pl.col("topsis_atractivo") < pl.col("topsis_atractivo").mean()
+        ) &
+        (
+            pl.col("topsis_viabilidad") < pl.col("topsis_viabilidad").mean()
+        ) 
+    ), 
+}
