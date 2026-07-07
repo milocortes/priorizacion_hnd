@@ -66,6 +66,12 @@ factores_descripcion = {
     >Fuente : Censos Económicos 2023, INEGI.
 
     """,
+    "Intensidad Institucional"  : 
+    """
+    - AGREGAR DESCRIPCION.
+    >Fuente : AGREGAR FUENTE.
+
+    """,
 }
                      
 
@@ -92,6 +98,7 @@ cw_viabilidad = {
     "Disponibilidad de Insumos" : "razon_insumos_presentes", 
     "Dependencia de una restricción o restricción potencial (Energía)" : "share_energy",
     "Dependencia de una restricción o restricción potencial (Electricidad)" : "razon_electricidad_gasto_total",
+    "Intensidad Institucional" : "institutional_intensity"
 }
 
 viabilidad_direccion = {
@@ -99,6 +106,7 @@ viabilidad_direccion = {
     "Disponibilidad de Insumos" : 1, 
     "Dependencia de una restricción o restricción potencial (Energía)" : -1,
     "Dependencia de una restricción o restricción potencial (Electricidad)" : -1,
+    "Intensidad Institucional" : -1
 }
 
 atractivo_direccion = {
@@ -270,7 +278,20 @@ def build_radar_data(
     data = [
         {
             "value" : list(np.round(radar_data.to_numpy()[0], 2) ), 
-            "name" : industria
+            "name" : industria, 
+
+            "symbol": 'rect',
+            "symbolSize": 16,
+            "lineStyle": {
+                "type": 'dashed'
+            },
+            "label": {
+                "show": True,
+            }, 
+          "areaStyle": {
+            "color": 'rgba(255, 228, 52, 0.6)'
+          }
+
         }
     ]
 

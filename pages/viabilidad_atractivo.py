@@ -153,6 +153,7 @@ with tab1:
             - Disponibilidad de Insumos.
             - Dependencia de una restricción o restricción potencial (Energía) 
             - Dependencia de una restricción o restricción potencial (Electricidad) 
+            - Intensidad Institucional
 
             """
         )
@@ -254,7 +255,8 @@ with tab2:
                 "Fortaleza en países como Honduras (RCA en el grupo de pares)", 
                 "Disponibilidad de Insumos", 
                 "Dependencia de una restricción o restricción potencial (Energía)", 
-                "Dependencia de una restricción o restricción potencial (Electricidad)"
+                "Dependencia de una restricción o restricción potencial (Electricidad)", 
+                "Intensidad Institucional"
             ]
             selected_factores_viabilidad = []
 
