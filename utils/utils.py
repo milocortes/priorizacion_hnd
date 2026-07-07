@@ -66,6 +66,7 @@ factores_descripcion = {
     >Fuente : Censos Económicos 2023, INEGI.
 
     """,
+    
     "Intensidad Institucional"  : 
     """
     - AGREGAR DESCRIPCION.
