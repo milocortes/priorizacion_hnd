@@ -6,11 +6,11 @@ import polars as pl
 import pandas as pd 
 
 factores_descripcion = {
-    "Capacidad para movilizar FDI (Mundo y América Latina)" : 
+    "Capacidad para movilizar FDI en América Latina" : 
     """
-    - Monto acumulado del monto acumulado de inversión en capital y creacion de empleo entre 2019 y 2024 en el mundo y América Latina.
+    - Monto acumulado de inversión en capital y creacion de empleo entre 2019 y 2024 en América Latina.
 
-    - Tasa de crecimiento compuesta de la inversión entre 2019 y 2024 en el mundo y América Latina.
+    - Tasa de crecimiento compuesta de la inversión entre 2019 y 2024 en América Latina.
 
     - Elasticidad de crecimiento del empleo al crecimiento de la inversión. 
     >Fuente : FDI Markets
@@ -69,8 +69,8 @@ factores_descripcion = {
     
     "Intensidad Institucional"  : 
     """
-    - AGREGAR DESCRIPCION.
-    >Fuente : AGREGAR FUENTE.
+    - La intensidad institucional es la proporción de insumos intermedios que no pueden adquirirse en mercados organizados y que no tienen un precio de referencia..
+    >Fuente : Levchenko, A. A. (2013). International trade and institutional change. The Journal of Law, Economics, & Organization, 29(5), 1145-1181..
 
     """,
 }
