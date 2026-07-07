@@ -178,32 +178,3 @@ plot_radar_atractivo(
 #st.dataframe(df)
 
 
-# Sample data
-data = {
-    "Product": ["Laptop", "Smartphone", "Tablet"],
-    "Price": [1200.50, 800.00, 350.75],
-    "Link": ["https://google.com", "https://google.com", "https://google.com"],
-}
-df = pd.DataFrame(data)
-
-# Pass configuration into st.dataframe
-st.dataframe(
-    df,
-    column_config={
-        "Product": st.column_config.TextColumn(
-            "Product Name", 
-            help="The official name of the product",
-            max_chars=20
-        ),
-        "Price": st.column_config.NumberColumn(
-            "Retail Price", 
-            format="$ %.2f"
-        ),
-        "Link": st.column_config.LinkColumn(
-            "Buy Link", 
-            display_text="Click here to Buy"
-        )
-    },
-    hide_index=True,
-    use_container_width=True
-)
