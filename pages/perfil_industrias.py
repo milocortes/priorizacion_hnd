@@ -4,6 +4,7 @@ import polars as pl
 import altair as alt 
 import pandas as pd 
 from typing import  List 
+import pickle
 
 from streamlit_echarts import st_echarts
 import pyecharts.options as opts
@@ -15,16 +16,32 @@ factores = pl.read_csv("datos/factores.csv")
 cdata_honduras = pl.read_csv("datos/cdata_honduras.csv")
 industrias = cdata_honduras.select("clase_titulo")
 
+# Carga jerarquía de actividades CIIU
+with open("datos/nested_ciiu.pkl", "rb") as file:
+    jerarquia = pickle.load(file)
+
 with st.sidebar:
     st.header("")
 
-    selected_industry = st.selectbox(
-        label="Selecciona una Industria",
-        options= industrias,
-        key="ex_category",
-        bind="query-params",
-    )
+    #selected_industry = st.selectbox(
+    #    label="Selecciona una Industria",
+    #    options= industrias,
+    #    key="ex_category",
+    #    bind="query-params",
+    #)
 
+    st.title("Selecciona una Clase CIIU")
+
+    # 1. Primary Dropdown
+    seccion = st.selectbox("Sección CIIU:", options=list(jerarquia.keys()))
+
+    # 2. Dependent Dropdown (Updates dynamically based on 'category')
+    division = st.selectbox("División CIIU:", options=jerarquia[seccion].keys())
+
+    selected_industry = st.selectbox("Clase CIIU:", options=jerarquia[seccion][division])
+
+    #st.write(f"Clase **{selected_industry}** de division **{division}**  de seccion {seccion}.")
+    
 def plot_radar_viablidad(
     cdata_honduras : pl.DataFrame,
     factores : pl.DataFrame, 
