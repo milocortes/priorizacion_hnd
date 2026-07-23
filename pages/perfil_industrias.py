@@ -9,6 +9,8 @@ import pickle
 from streamlit_echarts import st_echarts
 import pyecharts.options as opts
 
+import plotly.express as px
+
 st.title(":material/bar_chart: Perfil de Industrias")
 
 ## Carga datos
@@ -193,5 +195,85 @@ plot_radar_atractivo(
 
 
 #st.dataframe(df)
+import json
+with open("datos/flare.json", "r") as f:
+    data = json.loads(f.read())
+
+for idx, _ in enumerate(data["children"]):
+    data["children"][idx]["collapsed"] = idx % 2 == 0
+
+option = {
+    "tooltip": {"trigger": "item", "triggerOn": "mousemove"},
+    "series": [
+        {
+            "type": "tree",
+            "data": [data],
+            "top": "1%",
+            "left": "7%",
+            "bottom": "1%",
+            "right": "20%",
+            "symbolSize": 7,
+            "label": {
+                "position": "left",
+                "verticalAlign": "middle",
+                "align": "right",
+                "fontSize": 14,
+            },
+            "leaves": {
+                "label": {
+                    "position": "right",
+                    "verticalAlign": "middle",
+                    "align": "left",
+                }
+            },
+            "emphasis": {"focus": "descendant"},
+            "expandAndCollapse": True,
+            "animationDuration": 550,
+            "animationDurationUpdate": 750,
+        }
+    ],
+}
+st_echarts(option, height="500px")
 
 
+def get_demanda_mundial(producto : str) -> pl.DataFrame: 
+    return pl.scan_parquet(
+        "datos/demanda_global_ciiu.parquet"
+    ).filter(
+        Actividad=producto
+    ).with_columns(
+        (pl.col("Razon de Importacion")*100).round(2)
+    ).rename(
+        {
+            "Razon de Importacion" : "Razon de Importacion [%]"
+        }
+    ).collect()
+
+demanda_mundial_ciiu = get_demanda_mundial(selected_industry)
+
+if demanda_mundial_ciiu.is_empty():
+
+    st.write("No se encuentra Información disponible")
+else: 
+    fig_demanda = px.scatter_geo(
+        demanda_mundial_ciiu.to_pandas(), 
+        locations="country_iso3_code",       # Column containing ISO country codes
+        color="Razon de Importacion [%]",                  # Column determining the color scale
+        hover_name="Country",      # Column shown in bold at top of hover tooltip
+        color_continuous_scale=px.colors.sequential.Plasma,
+        title=f"Demanda de la Industria {selected_industry} ", 
+        projection="natural earth", 
+        size = "Razon de Importacion [%]"
+    )
+
+    fig_demanda.update_layout(
+        geo = dict(
+            #showframe=False,
+            showcoastlines=True,
+            showcountries=True,
+
+        )
+    )
+    fig_demanda.update_layout(height=600,width=800)
+
+    st.plotly_chart(fig_demanda, theme="streamlit", use_container_width=True)
