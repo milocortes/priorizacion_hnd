@@ -42,7 +42,7 @@ factores_descripcion = {
     "Fortaleza en países como Honduras (RCA en el grupo de pares)" : 
     """
     
-    - Elasticidad promedio de las industrias en Ecuador y El Salvador.
+    - Promedio de las Ventajas Comparativas Reveladas de la Industria en los Países Pares (Ecuador y El Salvador).
     """,
     "Disponibilidad de Insumos"  : 
     """
