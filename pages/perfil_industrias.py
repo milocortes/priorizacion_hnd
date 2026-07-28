@@ -477,7 +477,7 @@ def build_tree(arbol) :
                  "exporta" : test_boleano(v["Se Exporta"]),
                  "importa" : test_boleano(v["Se Importa"]), 
                  "disponible" : test_boleano(v["Disponible"]), 
-                 "itemStyle": { "color": "red" if  v["Disponible"] == 1 else "gray"}, 
+                 "itemStyle": { "color": "orange" if  v["Se Exporta"] == 1 else  "blue" if v["Se Importa"] == 1 else "gray"}, 
                  "categoria" : "insumo",
              }
              for v in hs_down
@@ -520,12 +520,12 @@ if selected_industry in map_ciiu_to_ciiu_code:
                 "left": "7%",
                 "bottom": "1%",
                 "right": "20%",
-                "symbolSize": 7,
+                "symbolSize": 10,
                 "label": {
                     "position": "left",
                     "verticalAlign": "middle",
                     "align": "right",
-                    "fontSize": 14,
+                    "fontSize": 16,
                 },
                 "leaves": {
                     "label": {
@@ -545,7 +545,7 @@ if selected_industry in map_ciiu_to_ciiu_code:
     st.write(
         f"""
         La raiz del árbol corresponde a la industria **{selected_industry}**. El primer nivel del árbol son los productos que componen a la industria.
-        Los nodos en este nivel son rojos si tienen una razón de disponibilidad arriba del 50%. El segundo nivel del árbol es la cadena de producción del producto. Los nodos color rojo indican si el insumo está disponible ya sea porque se exporta o porque se importa con intensidad (El insumo representa el 20% de las importaciones totales con las que se produce el producto).
+        Los nodos en este nivel son rojos si tienen una razón de disponibilidad arriba del 50%. El segundo nivel del árbol es la cadena de producción del producto. Los nodos color naranja indican que el insumo está disponible porque se exporta con ventaja comparativa, mientras que los nodos color azul indican que el insumo está diponible porque se importa con intensidad (El insumo representa el 20% de las importaciones totales con las que se produce el producto).
         """
     )
     st_echarts(option_arbol, height="500px")
