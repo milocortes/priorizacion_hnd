@@ -332,7 +332,7 @@ with st.popover("Selecciona Criterios"):
 
 st.markdown(f"### Factores de Viabilidad")
 
-col1_factores_viabilidad, col2_factores_viabilidad = st.columns(2, border=True)
+col2_factores_viabilidad, col1_factores_viabilidad = st.columns(2, border=True)
 
 with col1_factores_viabilidad:
 
@@ -380,7 +380,7 @@ with col2_factores_viabilidad:
     )
 st.markdown(f"### Factores de Atractivo")
 
-col1_factores_atractivo, col2_factores_atractivo = st.columns(2, border=True)
+col2_factores_atractivo, col1_factores_atractivo = st.columns(2, border=True)
 
 with col1_factores_atractivo:
 
