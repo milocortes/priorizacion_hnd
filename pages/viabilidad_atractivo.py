@@ -14,8 +14,17 @@ cdata_honduras = pl.read_csv("datos/cdata_honduras.csv")
 resultados_finales_intensivo = pd.read_excel("datos/seleccion_final_complexity.xlsx", sheet_name="intensivo")
 
 ### Resultados finales Extensivo
-resultados_finales_extensivo = pd.read_excel("datos/seleccion_final_complexity.xlsx", sheet_name="extensivo")
+resultados_finales_extensivo = pd.read_excel("datos/seleccion_final_complexity.xlsx", sheet_name="extensivo_portafolios")
 
+### Mapeo portafolios - prefijos
+mapp_portafolios = {
+    "todos" : "Completa",
+    "lhf" : "Low-hanging Fruit", 
+    "bp" : "Balanced Portfolio", 
+    "lj" : "Long Jumps"
+}
+
+mapp_portafolios_inv = {v:k for k,v in mapp_portafolios.items()}
 
 #cdata_intensivo = pl.read_csv("datos/honduras_intensivo_viabilidad_atractivo.csv")
 #cdata_extensivo = pl.read_csv("datos/honduras_extensivo_viabilidad_atractivo.csv")
@@ -329,59 +338,121 @@ with tab2:
 
         """
     )
+    if selected_criteria == "Margen Extensivo":
+        # Create two columns to place the popovers side-by-side
+        col1_popover, col2_popover = st.columns(2)
 
-    with st.popover("Selecciona Criterios"):
+        with col1_popover:
+            with st.popover("Selecciona Criterios"):
 
-        col1_factores, col2_factores = st.columns(2, border=True)
+                col1_factores, col2_factores = st.columns(2, border=True)
 
-        with col1_factores:
-            st.header("**Atractivo**")
+                with col1_factores:
+                    st.header("**Atractivo**")
 
-            ### Factores Atractivo
-            factores_atractivo = [
-                #"Monto acumulado de inversión en capital (Mundo)", 
-                "Monto acumulado de inversión en capital (LAC)", 
-                #"Tasa de crecimiento de la inversión (Mundo)", 
-                "Tasa de crecimiento de la inversión (LAC)", 
-                #"Elasticidad Empleo/Inversión (Mundo)",
-                "Elasticidad Empleo/Inversión (LAC)", 
-                "Crecimiento del Producto",
-                "Crecimiento de Exportaciones", 
-                "Posibilidad de sustituir las importaciones estadounidenses procedentes de China", 
-                "Capacidad para crear empleo"
-            ]
-            selected_factores_atractivo = []
+                    ### Factores Atractivo
+                    factores_atractivo = [
+                        #"Monto acumulado de inversión en capital (Mundo)", 
+                        "Monto acumulado de inversión en capital (LAC)", 
+                        #"Tasa de crecimiento de la inversión (Mundo)", 
+                        "Tasa de crecimiento de la inversión (LAC)", 
+                        #"Elasticidad Empleo/Inversión (Mundo)",
+                        "Elasticidad Empleo/Inversión (LAC)", 
+                        "Crecimiento del Producto",
+                        "Crecimiento de Exportaciones", 
+                        "Posibilidad de sustituir las importaciones estadounidenses procedentes de China", 
+                        "Capacidad para crear empleo"
+                    ]
+                    selected_factores_atractivo = []
 
-            st.write("Selecciona Factores de Atractivo:")
+                    st.write("Selecciona Factores de Atractivo:")
 
-            # Generate checkboxes dynamically
-            for factor in factores_atractivo:
-                # Use the item name as a unique key
-                checked = st.checkbox(factor, value=True)
-                if checked:
-                    selected_factores_atractivo.append(factor)
-        with col2_factores:
-            st.header("**Viabilidad**")
-            ### Factores Viabilidad
-            factores_viabilidad = [
-                "Fortaleza en países como Honduras (RCA en el grupo de pares)", 
-                "Disponibilidad de Insumos", 
-                "Dependencia de una restricción o restricción potencial (Energía)", 
-                "Dependencia de una restricción o restricción potencial (Electricidad)", 
-                "Intensidad Institucional"
-            ]
-            selected_factores_viabilidad = []
+                    # Generate checkboxes dynamically
+                    for factor in factores_atractivo:
+                        # Use the item name as a unique key
+                        checked = st.checkbox(factor, value=True)
+                        if checked:
+                            selected_factores_atractivo.append(factor)
+                with col2_factores:
+                    st.header("**Viabilidad**")
+                    ### Factores Viabilidad
+                    factores_viabilidad = [
+                        "Fortaleza en países como Honduras (RCA en el grupo de pares)", 
+                        "Disponibilidad de Insumos", 
+                        "Dependencia de una restricción o restricción potencial (Energía)", 
+                        "Dependencia de una restricción o restricción potencial (Electricidad)", 
+                        "Intensidad Institucional"
+                    ]
+                    selected_factores_viabilidad = []
 
-            st.write("Selecciona Factores de Viabilidad:")
+                    st.write("Selecciona Factores de Viabilidad:")
 
-            # Generate checkboxes dynamically
-            for factor in factores_viabilidad:
-                # Use the item name as a unique key
-                checked = st.checkbox(factor, value=True)
-                if checked:
-                    selected_factores_viabilidad.append(factor)
+                    # Generate checkboxes dynamically
+                    for factor in factores_viabilidad:
+                        # Use the item name as a unique key
+                        checked = st.checkbox(factor, value=True)
+                        if checked:
+                            selected_factores_viabilidad.append(factor)
 
-        #st.write("Factores Viabilidad:", selected_factores_viabilidad)
+                #st.write("Factores Viabilidad:", selected_factores_viabilidad)
+        with col2_popover:
+            with st.popover("Selecciona Portafolios"):
+                portafolio_seleccionado = st.radio(
+                    "Selecciona Portafolios",
+                    key="visibility",
+                    options=["Completa", "Low-hanging Fruit", "Balanced Portfolio", "Long Jumps"],
+                )
+    else:
+        with st.popover("Selecciona Criterios"):
+
+            col1_factores, col2_factores = st.columns(2, border=True)
+
+            with col1_factores:
+                st.header("**Atractivo**")
+
+                ### Factores Atractivo
+                factores_atractivo = [
+                    #"Monto acumulado de inversión en capital (Mundo)", 
+                    "Monto acumulado de inversión en capital (LAC)", 
+                    #"Tasa de crecimiento de la inversión (Mundo)", 
+                    "Tasa de crecimiento de la inversión (LAC)", 
+                    #"Elasticidad Empleo/Inversión (Mundo)",
+                    "Elasticidad Empleo/Inversión (LAC)", 
+                    "Crecimiento del Producto",
+                    "Crecimiento de Exportaciones", 
+                    "Posibilidad de sustituir las importaciones estadounidenses procedentes de China", 
+                    "Capacidad para crear empleo"
+                ]
+                selected_factores_atractivo = []
+
+                st.write("Selecciona Factores de Atractivo:")
+
+                # Generate checkboxes dynamically
+                for factor in factores_atractivo:
+                    # Use the item name as a unique key
+                    checked = st.checkbox(factor, value=True)
+                    if checked:
+                        selected_factores_atractivo.append(factor)
+            with col2_factores:
+                st.header("**Viabilidad**")
+                ### Factores Viabilidad
+                factores_viabilidad = [
+                    "Fortaleza en países como Honduras (RCA en el grupo de pares)", 
+                    "Disponibilidad de Insumos", 
+                    "Dependencia de una restricción o restricción potencial (Energía)", 
+                    "Dependencia de una restricción o restricción potencial (Electricidad)", 
+                    "Intensidad Institucional"
+                ]
+                selected_factores_viabilidad = []
+
+                st.write("Selecciona Factores de Viabilidad:")
+
+                # Generate checkboxes dynamically
+                for factor in factores_viabilidad:
+                    # Use the item name as a unique key
+                    checked = st.checkbox(factor, value=True)
+                    if checked:
+                        selected_factores_viabilidad.append(factor)
 
     ### Calcula topsis
 
@@ -403,6 +474,10 @@ with tab2:
                 pl.when(cond).then(pl.lit(val)) for val, cond in condiciones_fases.items()
             )
     )
+
+    if selected_criteria == "Margen Extensivo":
+        ### Selecciona portafolio
+        resultados_finales_extensivo = resultados_finales_extensivo[resultados_finales_extensivo[mapp_portafolios_inv[portafolio_seleccionado]]==1]
 
     cdata_extensivo = topsis_data.filter(
         pl.col("ACTIVITY").is_in(resultados_finales_extensivo["ciiu4_cod"])

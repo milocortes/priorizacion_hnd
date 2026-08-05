@@ -265,6 +265,12 @@ def build_radar_data(
     elif tipo_factor == "viabilidad": 
         criterios = [cw_viabilidad[factor] for factor in factores_lista_long_name]
 
+    ## Invierte los valores de Factores de viabilidad de dependencia de energia e intensidad institucional para que
+    ## entre más cercano a 1 mejor
+    if tipo_factor == "viabilidad":
+        factores_invierte = {'share_energy', 'razon_electricidad_gasto_total','institutional_intensity'}
+        factores_invierte = list(factores_invierte.intersection(criterios))
+        datos[factores_invierte] = 1 - datos[factores_invierte] 
 
     radar_data = datos.query(f"clase_titulo == '{industria}'")[criterios]
     

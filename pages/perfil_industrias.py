@@ -225,9 +225,10 @@ principal_plot = alt.Chart(
         ).encode(
     x=alt.X('distance').scale(zero=False).title("Distancia"),
     y=alt.Y('pci').title("PCI"),#.scale(type ="log"),
-    shape = alt.Shape("mcp:N").title("M"),
+    #shape = alt.Shape("mcp:N").title("M"),
+    size = alt.Size("OBS_VALUE").title("Empleo").scale(type ="log"),
     #color = alt.Color("rca").scale(type ="log", scheme='redblue', domainMid=1.0).title("RCA"),
-    color = alt.Color("Industria Seleccionada"),
+    color = alt.Color("rca").title("RCA").scale(type ="log", scheme='redblue', domainMid=1.0),
     #size = alt.Size("rca").scale(type ="log").title("RCA"),
     tooltip=[
         
