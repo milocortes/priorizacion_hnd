@@ -259,6 +259,7 @@ with tab1:
         st.markdown(
             """
             - Capacidad para movilizar FDI América Latina
+            - Elasticidad Empleo/Inversión (LAC)
             - Crecimiento de la industria a nivel mundial (Producción)
             - Crecimiento de la industria a nivel mundial (Exportaciones)
             - Posibilidad de sustituir las importaciones estadounidenses procedentes de China.
@@ -272,13 +273,13 @@ with tab1:
             """
             - Fortaleza en países como Honduras (RCA en el grupo de pares)
             - Disponibilidad de Insumos.
-            - Dependencia de una restricción o restricción potencial (Energía) 
+            
             - Dependencia de una restricción o restricción potencial (Electricidad) 
             - Intensidad Institucional
 
             """
         )
-
+        #- Dependencia de una restricción o restricción potencial (Energía) 
 
     action = st.menu_button("Descripción del Factor", options=factores_descripcion.keys())
 
@@ -439,7 +440,7 @@ with tab2:
                 factores_viabilidad = [
                     "Fortaleza en países como Honduras (RCA en el grupo de pares)", 
                     "Disponibilidad de Insumos", 
-                    "Dependencia de una restricción o restricción potencial (Energía)", 
+                    #"Dependencia de una restricción o restricción potencial (Energía)", 
                     "Dependencia de una restricción o restricción potencial (Electricidad)", 
                     "Intensidad Institucional"
                 ]

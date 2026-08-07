@@ -15,9 +15,9 @@ cdata_hnd = pl.read_csv("datos/cdata_hnd.csv")
 
 ### Define ponderadores
 product_selection_criteria = {
-    "Low-hanging Fruit" : {"cog" : 0.15, "pci" : 0.05, "density" : 0.8},
-    "Balanced Portfolio" : {"cog" : 0.25, "pci" : 0.25, "density" : 0.5},
-    "Long Jumps" : {"cog" : 0.45, "pci" : 0.35, "density" : 0.2},
+    "Low-hanging Fruit" : {"COG" : 0.15, "PCI" : 0.05, "Distance" : 0.8},
+    "Balanced Portfolio" : {"COG" : 0.25, "PCI" : 0.25, "Distance" : 0.5},
+    "Long Jumps" : {"COG" : 0.45, "PCI" : 0.35, "Distance" : 0.2},
 }
 
 ### Mapeo portafolios - prefijos

@@ -316,7 +316,7 @@ with st.popover("Selecciona Criterios"):
         factores_viabilidad = [
             "Fortaleza en países como Honduras (RCA en el grupo de pares)", 
             "Disponibilidad de Insumos", 
-            "Dependencia de una restricción o restricción potencial (Energía)", 
+            #"Dependencia de una restricción o restricción potencial (Energía)", 
             "Dependencia de una restricción o restricción potencial (Electricidad)", 
             "Intensidad Institucional"
         ]
