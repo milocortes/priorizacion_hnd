@@ -380,7 +380,7 @@ with tab2:
                     factores_viabilidad = [
                         "Fortaleza en países como Honduras (RCA en el grupo de pares)", 
                         "Disponibilidad de Insumos", 
-                        "Dependencia de una restricción o restricción potencial (Energía)", 
+                        #"Dependencia de una restricción o restricción potencial (Energía)", 
                         "Dependencia de una restricción o restricción potencial (Electricidad)", 
                         "Intensidad Institucional"
                     ]
@@ -478,7 +478,33 @@ with tab2:
 
     if selected_criteria == "Margen Extensivo":
         ### Selecciona portafolio
-        resultados_finales_extensivo = resultados_finales_extensivo[resultados_finales_extensivo[mapp_portafolios_inv[portafolio_seleccionado]]==1]
+        actividades_portafolio_selecionado = resultados_finales_extensivo[mapp_portafolios_inv[portafolio_seleccionado]]==1
+        
+        ### Filtra actividades de acuerdo al tipo de portafolio
+        #### Si el portafolio es Low-Hanging Fruit, quédate con todas las actividades
+        if mapp_portafolios_inv[portafolio_seleccionado] == "lhf":
+            pass 
+        ### Si el portafolio es Balanced Portfolio, elimina las actividades que están presentes en LHF
+        elif mapp_portafolios_inv[portafolio_seleccionado] == "bp":
+            actividades_portafolio_selecionado = (
+                actividades_portafolio_selecionado &
+                (
+                    resultados_finales_extensivo["lhf"]!=1
+                )
+            )
+        ### Si el portafolio es Balanced Portfolio, elimina las actividades que están presentes en LHF y BP
+        elif mapp_portafolios_inv[portafolio_seleccionado] == "lj":
+            actividades_portafolio_selecionado = (
+                actividades_portafolio_selecionado &
+                (
+                    resultados_finales_extensivo["lhf"]!=1
+                ) &
+                (
+                    resultados_finales_extensivo["bp"]!=1
+                )
+            )
+
+        resultados_finales_extensivo = resultados_finales_extensivo[actividades_portafolio_selecionado]
 
     cdata_extensivo = topsis_data.filter(
         pl.col("ACTIVITY").is_in(resultados_finales_extensivo["ciiu4_cod"])
