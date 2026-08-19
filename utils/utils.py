@@ -348,7 +348,6 @@ condiciones_fases = {
 def textiles_topsis_viabilidad_atractivo(
     data : pd.DataFrame, 
     top_n : int, 
-    textiles : pl.DataFrame
     ) -> pl.DataFrame:
 
     data = data.sort("topsis_complejidad", descending=True).head(top_n)
@@ -412,15 +411,12 @@ def textiles_topsis_viabilidad_atractivo(
         "hs12"
         ).with_columns(
             pl.col("hs12").cast(pl.Int32).cast(pl.String)
-        ).join(
-        textiles.select("hs12", "Actividad"),
-        on = "hs12"
-
-    ).with_columns(
+        ).with_columns(
             topsis_atractivo = textiles_pref_atractivo, 
             topsis_viabilidad = textiles_pref_viabilidad,
             topsis_complejidad = data["topsis_complejidad"],
-            cluster = data["product_name_short"]
+            cluster = data["product_name_short"], 
+            Actividad = data["Actividad"]
     )
 
     return data

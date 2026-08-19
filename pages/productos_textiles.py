@@ -8,22 +8,12 @@ st.title(":material/bar_chart: Productos Textiles : Factores de Viabilidad y Atr
 
 textiles_factores = pl.read_csv("datos/textiles_factores_topsis_complejidad.csv") 
 
-# Cargamos productos seleccionados de Textiles
-textiles = pl.read_csv(
-                "datos/productos_textiles.csv"
-            ).with_columns(
-                pl.col("HS12").cast(pl.String)
-            ).rename(
-                {"HS12":"hs12"}
-            )
-
-
 top_n = st.selectbox(
     "Selecciona Top de Productos",
     (10, 15, 20),
 )
 
-textiles_topsis = textiles_topsis_viabilidad_atractivo(textiles_factores, top_n, textiles)
+textiles_topsis = textiles_topsis_viabilidad_atractivo(textiles_factores, top_n)
 
 
 plot_textiles = alt.Chart(
