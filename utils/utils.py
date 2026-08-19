@@ -344,3 +344,83 @@ condiciones_fases = {
         ) 
     ), 
 }
+
+def textiles_topsis_viabilidad_atractivo(
+    data : pd.DataFrame, 
+    top_n : int, 
+    textiles : pl.DataFrame
+    ) -> pl.DataFrame:
+
+    data = data.sort("topsis_complejidad", descending=True).head(top_n)
+
+    # TOPSIS atractivo
+    textiles_atractivo_factores = [
+        "cumulative_investment_lac",
+        "cagr_investment",
+        "elasticidad",
+        "cagr_production",
+        "cagr_exports",
+        "share_imports_china", 
+    ]
+    textiles_alts_atractivo = data.select(textiles_atractivo_factores).to_numpy()
+
+    # Define criteria weights (should sum up to 1)
+    textiles_weights_atractivo = np.array([1/len(textiles_atractivo_factores)]*len(textiles_atractivo_factores))
+
+    # Define criteria types (1 for profit, -1 for cost)
+    textiles_types_atractivo = np.array([1]*len(textiles_atractivo_factores))
+
+    # Create object of the method
+    # Note, that default normalization method for TOPSIS is minmax
+    textiles_topsis_atractivo = TOPSIS()
+
+    # Determine preferences and ranking for alternatives
+    textiles_pref_atractivo = textiles_topsis_atractivo(textiles_alts_atractivo, textiles_weights_atractivo, textiles_types_atractivo)
+    textiles_ranking_atractivo = rrankdata(textiles_pref_atractivo)
+
+    # If you want to inspect computation process in details
+    textiles_results_atractivo = textiles_topsis_atractivo(textiles_alts_atractivo, textiles_weights_atractivo, textiles_types_atractivo, verbose=True)
+
+    # TOPSIS Viabilidad
+    textiles_viabilidad_factores = [
+        "rca_peers",
+        "razon_insumos_presentes", 
+        #"share_energy",
+        "razon_electricidad_gasto_total",
+        "institutional_intensity"
+    ]
+
+
+    textiles_alts_viabilidad = data.select(textiles_viabilidad_factores).to_numpy()
+
+    # Define criteria weights (should sum up to 1)
+    textiles_weights_viabilidad = np.array([1/len(textiles_viabilidad_factores)]*len(textiles_viabilidad_factores))
+
+    # Define criteria types (1 for profit, -1 for cost)
+    textiles_types_viabilidad = np.array([1, 1, -1, -1])
+
+    # Create object of the method
+    # Note, that default normalization method for TOPSIS is minmax
+    textiles_topsis_viabilidad = TOPSIS()
+
+    # Determine preferences and ranking for alternatives
+    textiles_pref_viabilidad = textiles_topsis_viabilidad(textiles_alts_viabilidad, textiles_weights_viabilidad, textiles_types_viabilidad)
+    textiles_ranking_viabilidad = rrankdata(textiles_pref_viabilidad)
+
+    ### Creamos data frame con los scores de viabilidad y atractivo
+    data = data.select(
+        "hs12"
+        ).with_columns(
+            pl.col("hs12").cast(pl.Int32).cast(pl.String)
+        ).join(
+        textiles.select("hs12", "Actividad"),
+        on = "hs12"
+
+    ).with_columns(
+            topsis_atractivo = textiles_pref_atractivo, 
+            topsis_viabilidad = textiles_pref_viabilidad,
+            topsis_complejidad = data["topsis_complejidad"],
+            cluster = data["product_name_short"]
+    )
+
+    return data

@@ -1,1 +1,1 @@
-from .utils import factores_descripcion, calcula_topsis, calcula_normalized_decision_matrix, build_radar_data, condiciones_fases
+from .utils import factores_descripcion, calcula_topsis, calcula_normalized_decision_matrix, build_radar_data, condiciones_fases, textiles_topsis_viabilidad_atractivo
