@@ -16,6 +16,25 @@ top_n = st.selectbox(
 textiles_topsis = textiles_topsis_viabilidad_atractivo(textiles_factores, top_n)
 
 
+# Define your custom mapping arrays
+group_domains = [
+  "Other vegetable textile fibres",
+  "Man-made staple fibres",
+  "Impregnated, coated or laminated textile fabrics",
+  "Man-made filaments",
+  "Furniture",
+  "Wadding, felt and nonwovens",
+  "Knitted fabrics",
+  "Wool",
+  "Special woven fabrics"
+]
+
+color_range = [
+    "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+"#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
+]
+
+
 plot_textiles = alt.Chart(
         textiles_topsis
         ).mark_circle(
@@ -27,7 +46,7 @@ plot_textiles = alt.Chart(
         ).encode(
     y=alt.Y('topsis_atractivo').scale(zero=False).title("Atractivo"),
     x=alt.X('topsis_viabilidad').scale(zero=False).title("Viabilidad"),#.scale(type ="log"),
-    color = alt.Color("cluster").title("Cluster"),
+    color = alt.Color("cluster", scale=alt.Scale(domain=group_domains, range=color_range)).title("Cluster"),
     #size = alt.Size("topsis_atractivo"),
     tooltip=[
 
