@@ -356,7 +356,8 @@ def textiles_topsis_viabilidad_atractivo(
     textiles_atractivo_factores = [
         "cumulative_investment_lac",
         "cagr_investment",
-        "elasticidad",
+        "elasticidad_empleo_fdi",
+        "elasticidad_empleo_producto",
         "cagr_production",
         "cagr_exports",
         "share_imports_china", 
